@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+  grafana:
+    image: grafana/grafana:9.1.5
+    container_name: grafana
+    restart: always
+    depends_on:
+      - graphite
+    ports:
+      - 3000:3000
+    networks:
+      - grafana-net
+    volumes:
+      - grafana-volume:/var/lib/grafana
+
+  graphite:
+    image: graphiteapp/graphite-statsd:1.1.5-13
+    container_name: graphite
+    restart: always
+    ports:
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - 8080:8080
+      - 8125:8125/udp
+      - 8126:8126
+    networks:
+      - grafana-net
+
+  ml_service:
+#    build: ./ml_service
+    image: angriff07/grafana_practice_ml_service:latest
+    ports:
+      - 8000:8000
+    depends_on:
+      - graphite
+    networks:
+      - grafana-net
+    volumes:
+      - ./ml_service:/service
+    environment:
+      - GRAPHITE_HOST=graphite
+      - GRAPHITE_PORT=8125
+
+  locust_master:
+    image: locustio/locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./locustfile.py:/mnt/locust/locustfile.py
+    command: -f /mnt/locust/locustfile.py --master -H http://locust_master:8089
+    networks:
+      - grafana-net
+
+  locust_worker:
+    image: locustio/locust
+    volumes:
+      - ./locustfile.py:/mnt/locust/locustfile.py
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust_master
+    networks:
+      - grafana-net
+
+volumes:
+  grafana-volume:
+    external: true
+
+networks:
+  grafana-net:
+

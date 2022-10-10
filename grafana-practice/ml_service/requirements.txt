@@ -1,0 +1,7 @@
+scikit-learn==1.1.2
+numpy==1.23.2
+fastapi==0.82.0
+catboost==1.0.6
+uvicorn==0.18.3
+graphyte==1.7.1
+statsd==3.3.0
