@@ -44,7 +44,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -88,12 +88,12 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.1.4",
+      "pluginVersion": "9.1.5",
       "targets": [
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "refId": "A",
           "target": "aliasByNode(movingAverage(stats.ml_service.predict_gender.$model.count, '1min'), -2)",
@@ -106,7 +106,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -133,7 +133,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 6,
+        "w": 12,
         "x": 12,
         "y": 1
       },
@@ -150,81 +150,19 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.1.4",
+      "pluginVersion": "9.1.5",
       "targets": [
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "refId": "A",
-          "target": "scale(stats.timers.ml_service.predict_gender.cb.timing.feature_extraction.mean_90, 1000)",
+          "target": "aliasByNode(scale(stats.timers.ml_service.predict_gender.$model.timing.feature_extraction.mean_90, 1000), -4)",
           "textEditor": true
         }
       ],
       "title": "Feature Extraction",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "graphite",
-        "uid": "JgNnL3MVk"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 18,
-        "y": 1
-      },
-      "id": 20,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
-      },
-      "pluginVersion": "9.1.4",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "JgNnL3MVk"
-          },
-          "refId": "A",
-          "target": "scale(stats.timers.ml_service.predict_gender.cb.timing.feature_extraction.mean_90, 1000)",
-          "textEditor": true
-        }
-      ],
-      "title": "Feature Extraction (thr 1)",
       "type": "gauge"
     },
     {
@@ -243,7 +181,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -280,7 +218,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -293,16 +231,17 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 0.05
               }
             ]
-          }
+          },
+          "unit": "percentunit"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 8,
+        "w": 24,
         "x": 0,
         "y": 7
       },
@@ -323,7 +262,112 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
+          },
+          "refCount": 0,
+          "refId": "A",
+          "target": "alias(divideSeries(stats.ml_service.predict_gender.request_status.error.count, sumSeries(stats.ml_service.predict_gender.request_status.*.count)), 'Error')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "NzEBkVSVz"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "B",
+          "target": "alias(divideSeries(stats.ml_service.predict_gender.request_status.success.count, sumSeries(stats.ml_service.predict_gender.request_status.*.count)), 'Success')",
+          "textEditor": true
+        }
+      ],
+      "title": "Success/Error Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "NzEBkVSVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "NzEBkVSVz"
           },
           "refId": "A",
           "target": "aliasByNode(movingAverage(stats.ml_service.predict_gender.$model.count, '1min'), -2)",
@@ -336,7 +380,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -397,7 +441,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 7
+        "y": 15
       },
       "id": 14,
       "options": {
@@ -416,7 +460,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "hide": false,
           "refCount": 0,
@@ -434,7 +478,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 11,
       "panels": [],
@@ -444,7 +488,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -505,9 +549,9 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 25
       },
-      "id": 6,
+      "id": 25,
       "options": {
         "legend": {
           "calcs": [],
@@ -524,20 +568,20 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "refId": "A",
-          "target": "aliasByTags(movingAverage(stats.ml_service.predict_gender.$model.result.$gender.count, '1min'), -2, -4)",
+          "target": "aliasByTags(movingAverage(groupByNode(stats.ml_service.predict_gender.*.result.$gender.count, -2, 'sum'), 5), -1)",
           "textEditor": false
         }
       ],
-      "title": "Avg predictions per 1 min",
+      "title": "Gender Predictions stats",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -599,7 +643,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 25
       },
       "id": 5,
       "options": {
@@ -618,7 +662,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "refId": "A",
           "target": "groupByNodes(movingAverage(stats.gauges.ml_service.predict_gender.$model.result.$gender.proba, '5min'), 'last', -2, -4)",
@@ -629,12 +673,131 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "graphite",
+        "uid": "NzEBkVSVz"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "m.cb",
+                  "m.lr"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "NzEBkVSVz"
+          },
+          "refId": "A",
+          "target": "aliasByTags(movingAverage(stats.ml_service.predict_gender.$model.result.$gender.count, '1min'), -2, -4)",
+          "textEditor": false
+        }
+      ],
+      "title": "Avg predictions per 1 min",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 43
       },
       "id": 13,
       "panels": [],
@@ -644,7 +807,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -704,7 +867,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 44
       },
       "id": 17,
       "options": {
@@ -723,7 +886,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "refCount": 0,
           "refId": "A",
@@ -737,7 +900,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -797,7 +960,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 53
       },
       "id": 4,
       "options": {
@@ -816,7 +979,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "refCount": 0,
           "refId": "A",
@@ -830,7 +993,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "JgNnL3MVk"
+        "uid": "NzEBkVSVz"
       },
       "fieldConfig": {
         "defaults": {
@@ -890,7 +1053,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 36
+        "y": 53
       },
       "id": 16,
       "options": {
@@ -909,7 +1072,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "JgNnL3MVk"
+            "uid": "NzEBkVSVz"
           },
           "hide": false,
           "refCount": 0,
@@ -922,7 +1085,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -1007,7 +1170,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "ML Service",
-  "uid": "UYU4wqM4z",
-  "version": 68,
+  "uid": "NzEBkVSVz",
+  "version": 18,
   "weekStart": ""
 }

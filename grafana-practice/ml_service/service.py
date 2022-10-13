@@ -64,12 +64,16 @@ app = FastAPI()
 @app.post("/predict_gender", response_model=Prediction)
 def predict_gender(user_request: UserRequestIn):
     model_type = user_request.model_type
+    name = user_request.name
+    if name == 'error':
+        statsd.incr(f'predict_gender.request_status.error.count')
+        raise KeyError
     statsd.incr(f'predict_gender.{model_type}.count')
     model = models[model_type]
     feature_extractor = feature_extractors[model_type]
 
     tic = time.perf_counter()
-    features = np.asarray(feature_extractor.transform([user_request.name]).todense())
+    features = np.asarray(feature_extractor.transform([name]).todense())
     toc = time.perf_counter()
     probas = model.predict_proba(features)[0]
     if probas[0] > probas[1]:
@@ -78,11 +82,11 @@ def predict_gender(user_request: UserRequestIn):
     else:
         gender = Gender.m
         proba = probas[1]
-    # toc2 = time.perf_counter()
 
     statsd.incr(f'predict_gender.{model_type}.result.{gender}.count')
     statsd.gauge(f'predict_gender.{model_type}.result.{gender}.proba', proba)
     statsd.timing(f'predict_gender.{model_type}.timing.feature_extraction', toc - tic)
+    statsd.incr(f'predict_gender.request_status.success.count')
     return Prediction(
         name=user_request.name,
         gender=gender,
