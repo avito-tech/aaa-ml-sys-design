@@ -11,19 +11,20 @@ docker volume create --name=grafana-volume
 
 Чтобы развернуть демонстрационный стенд Grafana, выполните.
 ```shell
-docker-compose up -d
+docker-compose up -d grafana
 ```
 Команда развернет
 - http://your_machine_ip:3000 - web ui графаны
 - http://your_machine_ip:8080 - web ui графита. Так будут расшарено много портов для взаимодействия с графитом
-- Дополнительные сервисы, рассмотрим на workshope'е:
-  - http://your_machine_ip:8000 - сервис с ML моделью. Модель предсказывает пол по имени.
-  Поиграться и побросать запросы в него можно со странички http://your_machine_ip:8000/docs
-  - http://your_machine_ip:8089 - web ui locust'а - инструмента, для нагрузочного тестирования.
 
 Проверить поднятые контейнеры можно так:
 ```shell
 docker ps
+```
+
+### Остановить работу grafana и graphite:
+```shell
+docker-compose down
 ```
 
 ## Знакомство c Graphite
@@ -31,7 +32,7 @@ docker ps
 ### Компоненты
 1. carbon - сервис, принимающий данные на вход
 2. whisper - БД для сохранения данных
-3. graphite-web - http://62.84.113.93:8080/ web ui
+3. graphite-web - http://your_machine_ip:8080/ web ui
 
 ### Документация по graphite
 - [Терминология](https://graphite.readthedocs.io/en/latest/terminology.html)
@@ -57,7 +58,8 @@ docker ps
 
 ## Удалить созданные объекты
 
-- Почистить volumes можно так: `docker volume prune`
+- Почистить данные графана можно так: `docker volume rm grafana-volume` (убедитесь, что контейнеры остановлены)
+- Почистить все volumes можно так: `docker volume prune`
 - Почистить все объекты: `docker system prune --volumes`
 
 [Полная документация](https://docs.docker.com/config/pruning/)
