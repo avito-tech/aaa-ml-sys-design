@@ -2,9 +2,11 @@
 
 3w [readme](./w3-model-evaluation/ReadMe.md)
 
-# Grafana practice
-Grafana practice [readme](./grafana-practice/ReadMe.md)
+# Grafana Intro
+[Grafana Intro Readme](./grafana-practice/Grafana_Intro_ReadMe.md)
 
+# Grafana Workshop
+[Grafana Workshop Readme](./grafana-practice/ReadMe.md)
 
 ## Installation
 ```shell
