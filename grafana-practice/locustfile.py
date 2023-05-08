@@ -3,7 +3,6 @@ import math
 import random
 from locust import HttpUser, task, between
 
-ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
 
 LOGREG_REQUEST_PROBA = 0.4
 MALE_PROBA = 0.45
@@ -54,7 +53,6 @@ def generate_name_data():
     model_type = 'cb'
     if random.random() < get_logreg_proba(t):
         model_type = 'lr'
-    r = random.random()
     if random.random() < get_error_proba(t):
         name = 'error'
     else:

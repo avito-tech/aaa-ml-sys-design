@@ -65,10 +65,10 @@ app = FastAPI()
 def predict_gender(user_request: UserRequestIn):
     model_type = user_request.model_type
     name = user_request.name
+    statsd.incr(f'predict_gender.{model_type}.count')
     if name == 'error':
         statsd.incr(f'predict_gender.request_status.error.count')
         raise KeyError
-    statsd.incr(f'predict_gender.{model_type}.count')
     model = models[model_type]
     feature_extractor = feature_extractors[model_type]
 
