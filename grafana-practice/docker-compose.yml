@@ -11,6 +11,8 @@ services:
       - 3000:3000
     networks:
       - grafana-net
+    environment:
+      - GF_LOG_LEVEL="error"
     volumes:
       - grafana-volume:/var/lib/grafana
 
@@ -26,6 +28,8 @@ services:
       - 8126:8126
     networks:
       - grafana-net
+    environment:
+      - CARBON_AGGREGATOR_DISABLED=1
 
   ml_service:
 #    build: ./ml_service
@@ -41,6 +45,7 @@ services:
     environment:
       - GRAPHITE_HOST=graphite
       - GRAPHITE_PORT=8125
+    command: "service:app --host 0.0.0.0 --log-level error"
 
   locust_master:
     image: locustio/locust
