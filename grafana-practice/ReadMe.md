@@ -56,10 +56,38 @@ docker-compose up -d
 docker ps
 ```
 
-#### Остановить работу grafana и graphite:
+#### Остановить работу всех контейнеров:
 ```shell
 docker-compose down
 ```
+
+## ML Service
+На 8000 порту поднят сервис с ML моделью. Модель предсказывает пол по имени.
+
+- your_ip:8000/predict_gender/ - handler (POST request), ручка для вызова сервиса из вне. Формат входа/выхода. 
+![Формат входа/выхода](pics/ml_service_input_output.png "ML service input/output")
+- Допустимые model_type: `lr`, `cb` (logreg, catboost)
+- Поиграться и побросать запросы в него можно со странички http://your_machine_ip:8000/docs - Swagger API
+
+## Locust
+Locust - это инструмент для нагрузочного тестирования.
+
+http://your_machine_ip:8089 - web ui locust'а.
+
+Чтобы подать нагрузку на ml сервис заполните поля следующим образом
+- number of users: 10
+- Spawn rate: 5
+- Host: http://your_machine_ip:8000
+- Нажмите `Start swarming`
+
+## Внесение изменений в файл для нагрузочного тестирования и ML service
+Внести изменения в код сервиса можно в файлике:
+[service.py](./ml_service/service.py)
+
+Внести изменения в код построения запросов для locust можно в файлике:
+[locustfile.py](./locustfile.py)
+
+Код написан таким образом, что пересобирать docker образы не нужно (если, конечно, вы не добавляете новые библиотеки).
 
 ## Знакомство c Graphite
 
@@ -108,35 +136,6 @@ docker-compose down
   - Webhook URL возьмите из поста в ММ [пост в ММ](https://mt.avito.ru/avito/pl/ttobbi151jntjc4ziucof17xjo)
   - В `Optional Slack settings` заполните Username, например, как "Grafana Alert"
   - В `Optional Slack settings` можно добавить Icon emoji, например, :harold:
-
-
-## ML Service
-На 8000 порту поднят сервис с ML моделью. Модель предсказывает пол по имени.
-
-- your_ip:8000/predict_gender/ - handler (POST request), ручка для вызова сервиса из вне. Формат входа/выхода. 
-![Формат входа/выхода](pics/ml_service_input_output.png "ML service input/output")
-- Допустимые model_type: `lr`, `cb` (logreg, catboost)
-- Поиграться и побросать запросы в него можно со странички http://your_machine_ip:8000/docs - Swagger API
-
-## Locust
-Locust - это инструмент для нагрузочного тестирования.
-
-http://your_machine_ip:8089 - web ui locust'а.
-
-Чтобы подать нагрузку на ml сервис заполните поля следующим образом
-- number of users: 10
-- Spawn rate: 5
-- Host: http://your_machine_ip:8000
-- Нажмите `Start swarming`
-
-## Внесение изменений в файл для нагрузочного тестирования и ML service
-Внести изменения в код сервиса можно в файлике:
-[service.py](./ml_service/service.py)
-
-Внести изменения в код построения запросов для locust можно в файлике:
-[locustfile.py](./locustfile.py)
-
-Код написан таким образом, что пересобирать docker образы не нужно (если, конечно, вы не добавляете новые библиотеки).
 
 ## Удалить созданные объекты на виртуальной машине
 
